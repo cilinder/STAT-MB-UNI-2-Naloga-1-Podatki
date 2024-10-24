@@ -113,7 +113,7 @@ Podane imaš naslednje podatke o pljučnih kapacitetah:
 <br>
 {html_table}
 <br>
-<a href="https://raw.githubusercontent.com/cilinder/STAT-MB-UNI-2-Naloga-1-Podatki/refs/heads/main/podatki_{i+1}.zip" download>Prenesi podatke</a>
+<a href="https://raw.githubusercontent.com/cilinder/STAT-MB-UNI-2-Naloga-1-Podatki/refs/heads/main/podatki/podatki_{i+1}.zip" download>Prenesi podatke</a>
 <br><br>
 
 Izračunaj koliko je $$a_n$$: 
