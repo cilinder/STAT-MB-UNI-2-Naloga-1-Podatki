@@ -91,6 +91,9 @@ def generateMoodleXML(headers, data, num_questions):
                 "FEV1": int(row["FEV1"]) + random.normal(0,1)
             })
 
+        average = sum([row["FEV1"] for row in perturbed_data])/len(perturbed_data)
+        print("average: ", average)
+
         with open(f'podatki/podatki_{i+1}.csv', 'w') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=headers)
             writer.writeheader()
@@ -108,17 +111,20 @@ def generateMoodleXML(headers, data, num_questions):
         name_text.text = f"<![CDATA[Vprašanje {i + 1}]]>"
         questiontext = ET.SubElement(question, "questiontext")
         text = ET.SubElement(questiontext, "text")
+
+
         text.text = f'''<![CDATA[
 Podane imaš naslednje podatke o pljučnih kapacitetah:
 <br>
 {html_table}
 <br>
-<a href="https://raw.githubusercontent.com/cilinder/STAT-MB-UNI-2-Naloga-1-Podatki/refs/heads/main/podatki/podatki_{i+1}.zip" download>Prenesi podatke</a>
+<a href="https://github.com/cilinder/STAT-MB-UNI-2-Naloga-1-Podatki/raw/refs/heads/main/podatki/podatki_{i+1}.zip" download>Prenesi podatke</a>
 <br><br>
 
-Izračunaj koliko je $$a_n$$: 
-{{1:NUMERICAL:=2.0000000000000:0.01}}
+Izračunaj koliko je povprečna vrednost FEV1: 
+{{1:NUMERICAL:={average}:0.01}}
         ]]>'''
+
         shuffle_answers = ET.SubElement(question, "shuffleanswers")
         shuffle_answers.text = "0"
 
