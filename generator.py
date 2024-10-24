@@ -92,7 +92,6 @@ def generateMoodleXML(headers, data, num_questions):
             })
 
         average = sum([row["FEV1"] for row in perturbed_data])/len(perturbed_data)
-        print("average: ", average)
 
         with open(f'podatki/podatki_{i+1}.csv', 'w') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=headers)
@@ -150,3 +149,4 @@ if __name__ == "__main__":
     # generateDataVariations(data, headers, names)
 
     generateMoodleXML(headers, data, 10)
+    print(f"Generated vprasanja.xml with {10} questions")
