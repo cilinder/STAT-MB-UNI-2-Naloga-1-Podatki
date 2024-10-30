@@ -110,7 +110,7 @@ Ustvarite novo spremenljivko, ki bo imela vrednost 1, če je FEV1 manjši ali en
 
 <ol>
     <li>
-        Izračunajte senzitivnost in specifičnost diagnostičnega testa, ki napovede pnevmokoniozo v primeru, ko FEV1 ≤ 75. Odgovora podajte v procentih na 1 decimalko natančno.
+        Izračunajte senzitivnost in specifičnost diagnostičnega testa, ki napovede pnevmokoniozo v primeru, ko FEV1 ≤ 75. Odgovora podajte v procentih na 1 decimalko natančno, kot decimalno ločilo uporabite piko.
         <br>
         Senzitivnost: (4 točke) {{4:NUMERICAL:={results[0][i]}:0.1}} %
         <br>
@@ -118,7 +118,7 @@ Ustvarite novo spremenljivko, ki bo imela vrednost 1, če je FEV1 manjši ali en
     </li>
     <br>
     <li>
-        Kolikšna je verjetnost, da vaš test, ki ga uporabite za testiranje 6 neodvisnih pacientov, ki imajo pnevmokoniozo, dejansko vseh 6 pacientov diagnosticira kot bolne? Odgovor podajte v procentih na 1 decimalko natančno.
+        Kolikšna je verjetnost, da vaš test, ki ga uporabite za testiranje 6 neodvisnih pacientov, ki imajo pnevmokoniozo, dejansko vseh 6 pacientov diagnosticira kot bolne? Odgovor podajte v procentih na 1 decimalko natančno, kot decimalno ločilo uporabite piko.
         <br>
         Verjetnost je: (2 točki) {{2:NUMERICAL:={results[2][i]}:0.1}} %
     </li>
