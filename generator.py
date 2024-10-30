@@ -105,7 +105,7 @@ Podatki vključujejo izmerjeni pljučni volumen (forsirani ekspiratorni volumen;
 
 Ustvarite novo spremenljivko, ki bo imela vrednost 1, če je FEV1 manjši ali enak 75, v nasprotnem primeru nastavi vrednost 0. 
 <br><br> 
-<a href="https://github.com/cilinder/STAT-MB-UNI-2-Naloga-1-Podatki/raw/refs/heads/main/podatki/podatki_{i+1}.zip" download>Prenesi podatke</a>
+<a href="https://github.com/cilinder/STAT-MB-UNI-2-Naloga-1-Podatki/raw/refs/heads/main/podatki/podatki_{i+1}.xlsx" download>Prenesi podatke</a>
 <br><br>
 
 <ol>
@@ -155,6 +155,7 @@ Ustvarite novo spremenljivko, ki bo imela vrednost 1, če je FEV1 manjši ali en
 
 
 if __name__ == "__main__":
+    random.seed(2024)
     (headers, data, results) = readData()
     # # generateDataVariations(data, headers, names)
 
