@@ -124,7 +124,7 @@ Ustvarite novo spremenljivko, ki bo imela vrednost 1, če je FEV1 manjši ali en
     </li>
     <br>
     <li>
-        Senzitivnost in specifičnost grafično predstavite. Naložite graf v Excelovi datoteki. (5 točk)
+        Senzitivnost in specifičnost grafično predstavite. Graf naložite v Excelovi datoteki v spletno učilnico pod razdelek DN1 - Graf. (5 točk)
     </li>
     <br>
     <li>
