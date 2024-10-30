@@ -3,16 +3,22 @@ import csv
 from numpy import random
 import zipfile
 import os
+import random
+import pandas as pd
 
 def readData():
     data = []
-    with open('pneumo.csv', newline='') as csvfile:
-        reader = csv.DictReader(csvfile, delimiter=',', quotechar='"')
-        headers = reader.fieldnames
+    with open('DN1.csv', newline='') as csvfile:
+        reader = csv.reader(csvfile, delimiter=',', quotechar='"')
         for row in reader:
             data.append(row)
+        headers = data[0]
+        data = data[1:]
+        results = data[-3:]
+        results = [res[1:] for res in results]
+        data = data[0:-3]
 
-    return (headers, data)
+    return (headers, data, results)
 
 # Using XML Moodle format
 # documented here: https://docs.moodle.org/405/en/Moodle_XML_formatl
@@ -31,31 +37,6 @@ def generateTable(headers, data):
 
     table += '</table>\n'
     return table
-
-def generateDownloadJavascript():
-    data = []
-    with open('pneumo.csv', newline='') as csvfile:
-        reader = csv.reader(csvfile, delimiter=',', quotechar='"')
-        for row in reader:
-            data.append(row)
-
-    javascriptCode = f'''
-const rows = {[[str(val) for val in row] for row in data]};\n
-csvContent = "data:text/csv;charset=utf-8,"
-
-rows.forEach(function(rowArray) {{
-    let row = rowArray.join(",");
-    csvContent += row + "\\r\\n";
-}});
-var encodedUri = encodeURI(csvContent);
-var link = document.createElement("a");
-link.setAttribute("href", encodedUri);
-link.setAttribute("download", "my_data.csv");
-document.body.appendChild(link); // Required for FF
-link.click();
-
-    '''
-    return javascriptCode
 
 def generateDataVariations(data, headers, names):
     # For each student in `names`, generate a variation of the data
@@ -77,32 +58,27 @@ def generateDataVariations(data, headers, names):
             zf.write(f'podatki/podatki_{name}.csv', arcname=f'podatki_{name}.csv')
         os.remove(f'podatki/podatki_{name}.csv')
 
-def generateMoodleXML(headers, data, num_questions):
+vprasanja = [
+    "Senzitivnost testa se zmanjša, specifičnost pa zveča.",
+    "Senzitivnost se lahko zmanjša ali zveča, glede specifičnosti pa ne moremo podati nobenih zaključkov.",
+    "Obe senzitivnost in specifičnost testa se zvečata.",
+    "Senzitivnost testa se zveča, specifičnost pa zmanjša.",
+    "Obe senzitivnost in specifičnost testa ostaneta nespremenjeni.",
+]
+
+def generateMoodleXML(headers, data, results):
     # Create the structure of the XML file
     quiz = ET.Element("quiz")
 
-    for i in range(num_questions):
+    for i in range(20):
 
-        perturbed_data = []
-        for row in data:
-            perturbed_data.append({
-                "ID": row["ID"],
-                "pnevmo": row["pnevmo"],
-                "FEV1": int(row["FEV1"]) + random.normal(0,1)
-            })
+        data_i = [[data[j][0], data[j][i+1]] for j in range(len(data))]
+        df1 = pd.DataFrame(
+            data_i,
+            columns=['Pnevmo', 'FEV1'],
+        )
+        df1.to_excel(f'podatki/podatki_{i+1}.xlsx', index=False)
 
-        average = sum([row["FEV1"] for row in perturbed_data])/len(perturbed_data)
-
-        with open(f'podatki/podatki_{i+1}.csv', 'w') as csvfile:
-            writer = csv.DictWriter(csvfile, fieldnames=headers)
-            writer.writeheader()
-            for row in perturbed_data:
-                writer.writerow(row)
-        with zipfile.ZipFile(f'podatki/podatki_{i+1}.zip', 'w') as zf:
-            zf.write(f'podatki/podatki_{i+1}.csv', arcname=f'podatki_{i+1}.csv')
-        os.remove(f'podatki/podatki_{i+1}.csv')
-
-        html_table = generateTable(headers, perturbed_data)
         question = ET.SubElement(quiz, "question")
         question.set("type", "cloze")
         name_tag = ET.SubElement(question, "name")
@@ -111,17 +87,52 @@ def generateMoodleXML(headers, data, num_questions):
         questiontext = ET.SubElement(question, "questiontext")
         text = ET.SubElement(questiontext, "text")
 
+        premesana_vprasanja = ''
+        abcd = ['A', 'B', 'C', 'D', 'E']
+        random.shuffle(vprasanja)
+        for i in range(len(vprasanja)):
+            if vprasanja[i] == "Senzitivnost testa se zveča, specifičnost pa zmanjša.":
+                premesana_vprasanja += f'~={abcd[i]}. {vprasanja[i]}'
+            else:
+                premesana_vprasanja += f'~{abcd[i]}. {vprasanja[i]}'
+        
+        premesana_vprasanja = premesana_vprasanja[1:]
 
         text.text = f'''<![CDATA[
-Podane imaš naslednje podatke o pljučnih kapacitetah:
-<br>
-{html_table}
-<br>
+V datoteki so podatki o 40 rudarjih iz študije “Mine workers and pneumoconiosis” (Campbell, Machin: Medical statistics. New York: Wiley, 1995). 
+Podatki vključujejo izmerjeni pljučni volumen (forsirani ekspiratorni volumen; FEV1) ter status o prisotni pnevmokoniozi – bolezni pljuč
+(spremenljivka pnevmo z vrednostmi da, v primeru, da je bila bolezen klinično diagnosticirana, oz. ne v primeru odsotnosti bolezni). 
+
+Ustvarite novo spremenljivko, ki bo imela vrednost 1, če je FEV1 manjši ali enak 75, v nasprotnem primeru nastavi vrednost 0. 
+<br><br> 
 <a href="https://github.com/cilinder/STAT-MB-UNI-2-Naloga-1-Podatki/raw/refs/heads/main/podatki/podatki_{i+1}.zip" download>Prenesi podatke</a>
 <br><br>
 
-Izračunaj koliko je povprečna vrednost FEV1: 
-{{1:NUMERICAL:={average}:0.01}}
+<ol>
+    <li>
+        Izračunajte senzitivnost in specifičnost diagnostičnega testa, ki napovede pnevmokoniozo v primeru, ko FEV1 ≤ 75. Odgovora podajte v procentih na 1 decimalko natančno.
+        <br>
+        Senzitivnost: (4 točke) {{4:NUMERICAL:={results[0][i]}:0.1}} %
+        <br>
+        Specifičnost: (4 točke) {{4:NUMERICAL:={results[1][i]}:0.1}} %
+    </li>
+    <br>
+    <li>
+        Kolikšna je verjetnost, da vaš test, ki ga uporabite za testiranje 6 neodvisnih pacientov, ki imajo pnevmokoniozo, dejansko vseh 6 pacientov diagnosticira kot bolne? Odgovor podajte v procentih na 1 decimalko natančno.
+        <br>
+        Verjetnost je: (2 točki) {{2:NUMERICAL:={results[2][i]}:0.1}} %
+    </li>
+    <br>
+    <li>
+        Senzitivnost in specifičnost grafično predstavite. Naložite graf v Excelovi datoteki. (5 točk)
+    </li>
+    <br>
+    <li>
+        Kako se spremenita senzitivnost in specifičnost, če namesto tega za klasifikacijo prisotnosti bolezni uporabimo kriterij FEV1 ≤ 80? (5 točk)
+        <br>
+        {{5:MCV:{premesana_vprasanja}}}
+    </li>
+</ol>
         ]]>'''
 
         shuffle_answers = ET.SubElement(question, "shuffleanswers")
@@ -144,9 +155,8 @@ Izračunaj koliko je povprečna vrednost FEV1:
 
 
 if __name__ == "__main__":
-    names = ["Janez Novak", "Borut Pahor", "Tinkara Kovač"]
-    (headers, data) = readData()
-    # generateDataVariations(data, headers, names)
+    (headers, data, results) = readData()
+    # # generateDataVariations(data, headers, names)
 
-    generateMoodleXML(headers, data, 10)
-    print(f"Generated vprasanja.xml with {10} questions")
+    generateMoodleXML(headers, data, results)
+    # print(f"Generated vprasanja.xml with {10} questions")
