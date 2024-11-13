@@ -77,6 +77,7 @@ def generateMoodleXML(headers, data, results):
             data_i,
             columns=['Pnevmo', 'FEV1'],
         )
+        df1["FEV1"] = df1["FEV1"].astype(float)
         df1.to_excel(f'podatki/podatki_{i+1}.xlsx', index=False)
 
         question = ET.SubElement(quiz, "question")
