@@ -104,6 +104,8 @@ V datoteki so podatki o 40 rudarjih iz študije “Mine workers and pneumoconios
 Podatki vključujejo izmerjeni pljučni volumen (forsirani ekspiratorni volumen; FEV1) ter status o prisotni pnevmokoniozi – bolezni pljuč
 (spremenljivka pnevmo z vrednostmi da, v primeru, da je bila bolezen klinično diagnosticirana, oz. ne v primeru odsotnosti bolezni). 
 
+Nalogo rešujte v Excelu. Ustvarite novo spremenljivko, ki bo imela vrednost da, če je FEV1 manjši ali enak 75, v nasprotnem primeru nastavi vrednost ne.
+
 Ustvarite novo spremenljivko, ki bo imela vrednost 1, če je FEV1 manjši ali enak 75, v nasprotnem primeru nastavi vrednost 0. 
 <br><br> 
 <a href="https://github.com/cilinder/STAT-MB-UNI-2-Naloga-1-Podatki/raw/refs/heads/main/podatki/podatki_{i+1}.xlsx" download>Prenesi podatke</a>
@@ -111,7 +113,7 @@ Ustvarite novo spremenljivko, ki bo imela vrednost 1, če je FEV1 manjši ali en
 
 <ol>
     <li>
-        Izračunajte senzitivnost in specifičnost diagnostičnega testa, ki napovede pnevmokoniozo v primeru, ko FEV1 ≤ 75. Odgovora podajte v procentih na 1 decimalko natančno, kot decimalno ločilo uporabite piko.
+        Izračunajte senzitivnost (občutljivost) in specifičnost diagnostičnega testa, ki napovede pnevmokoniozo v primeru, ko FEV1 ≤ 75. Odgovora podajte v procentih na 1 decimalko natančno, kot decimalno ločilo uporabite piko. Pri reševanju si pomagajte z vrtilno tabelo.
         <br>
         Senzitivnost: (4 točke) {{4:NUMERICAL:={results[0][i]}:0.1}} %
         <br>
@@ -125,11 +127,11 @@ Ustvarite novo spremenljivko, ki bo imela vrednost 1, če je FEV1 manjši ali en
     </li>
     <br>
     <li>
-        Senzitivnost in specifičnost grafično predstavite. Graf naložite v Excelovi datoteki v spletno učilnico pod razdelek DN1 - Graf. (5 točk)
+        Senzitivnost (občutljivost) in specifičnost izračunajte še za kriterije: FEV1 ≤ 60, FEV1 ≤ 70, FEV1 ≤ 80, FEV1 ≤ 90, FEV1 ≤ 100, FEV1 ≤ 110 ter rezultate grafično predstavite s krivuljo ROC. Graf naložite v Excelovi datoteki v spletno učilnico pod razdelek DN1. (5 točk)
     </li>
     <br>
     <li>
-        Kako se spremenita senzitivnost in specifičnost, če namesto tega za klasifikacijo prisotnosti bolezni uporabimo kriterij FEV1 ≤ 80? (5 točk)
+        Kako se spremenita senzitivnost (občutljivost) in specifičnost, če namesto kriterija FEV1 ≤ 75 za klasifikacijo prisotnosti bolezni uporabimo kriterij FEV1 ≤ 80? (5 točk)
         <br>
         {{5:MCV:{premesana_vprasanja}}}
     </li>
