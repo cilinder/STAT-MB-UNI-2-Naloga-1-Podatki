@@ -105,8 +105,6 @@ Podatki vključujejo izmerjeni pljučni volumen (forsirani ekspiratorni volumen;
 (spremenljivka pnevmo z vrednostmi da, v primeru, da je bila bolezen klinično diagnosticirana, oz. ne v primeru odsotnosti bolezni). 
 
 Nalogo rešujte v Excelu. Ustvarite novo spremenljivko, ki bo imela vrednost da, če je FEV1 manjši ali enak 75, v nasprotnem primeru nastavi vrednost ne.
-
-Ustvarite novo spremenljivko, ki bo imela vrednost 1, če je FEV1 manjši ali enak 75, v nasprotnem primeru nastavi vrednost 0. 
 <br><br> 
 <a href="https://github.com/cilinder/STAT-MB-UNI-2-Naloga-1-Podatki/raw/refs/heads/main/podatki/podatki_{i+1}.xlsx" download>Prenesi podatke</a>
 <br><br>
